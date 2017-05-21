@@ -124,7 +124,6 @@ public class TEST_enemy : GameCharacter {
 
             if (canSeePlayer)
             {
-                print("JOSUAAAAAAAA");
                 nav.isStopped = false;
                 currentState = ENEMY_STATE.CHASE;
                 yield break;
@@ -229,7 +228,6 @@ public class TEST_enemy : GameCharacter {
 
             if (Physics.Raycast(eyePosition.position, (directionToTarget + Vector3.up / 10) * distanceOfView, out hit, notMyLayer))
             {
-                print(hit.collider.name);
                 if (hit.collider.tag == "PlayerRoot")
                 {    
                     return true;

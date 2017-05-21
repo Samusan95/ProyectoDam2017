@@ -32,7 +32,7 @@ public class CameraOrbit : MonoBehaviour {
         if (playerHasEnemy)
         {
             position = player.position + player.TransformDirection(Vector3.one + positionInCombat);
-            rotation = Quaternion.LookRotation((player.transform.position + Vector3.up * playerHeight) - transform.position);   
+            rotation = Quaternion.LookRotation((player.GetComponent<PlayerMovement>().currentEnemy.transform.position + Vector3.up * playerHeight) - transform.position);   
         }
         else
         {

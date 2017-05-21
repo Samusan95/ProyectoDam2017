@@ -102,7 +102,8 @@ public class PlayerMovement : GameCharacter {
         else
         {
             nav.isStopped = true;
-            faceToPosition(currentEnemy.transform.position);
+            
+            
             if (!isInAnimatorState(0, "Attack") && !isBlocking)
             {
                 if (Input.GetKeyDown(KeyCode.RightArrow))
