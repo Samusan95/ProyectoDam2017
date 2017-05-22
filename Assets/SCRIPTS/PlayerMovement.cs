@@ -9,27 +9,29 @@ using UnityEngine.AI;
 
 public class PlayerMovement : GameCharacter {
 
-    
+    [Header("Controls")]
+    public GameObject combatUI;
+    public Joystick joystick;
 
+    
     public enum states
     {
         goToPosition,
         attackEnemy
     }
-
+    [Header("States")]
     public states currentState;
     
-    public Vector3 positionToGo;
+    private Vector3 positionToGo;
     public GameObject currentEnemy;
 
 
     public float defenseCoolDown = 1f;
-    public float defenseCoolDownTimer = 0;
+    private float defenseCoolDownTimer = 0;
 
     bool isInCombat;
     private void Start()
     {
-       
         nav = GetComponent<NavMeshAgent>();
         positionToGo = transform.position;
     }
@@ -40,6 +42,8 @@ public class PlayerMovement : GameCharacter {
     {
 
         isInCombat = currentEnemy != null && Vector3.Distance(transform.position, currentEnemy.transform.position) < 5f;
+        combatUI.SetActive(isInCombat);
+
         float speedMagnitude;
 
         if (Input.GetKeyDown(KeyCode.Q))
@@ -92,8 +96,8 @@ public class PlayerMovement : GameCharacter {
             enableAgent(false);
 
 
-            float h = Input.GetAxis("Horizontal");
-            float v = Input.GetAxis("Vertical");
+            float h = joystick.Horizontal();
+            float v = joystick.Vertical();
             
             speedMagnitude = Mathf.Abs(h + v);
             animator.SetFloat("vertical", v);
@@ -193,5 +197,8 @@ public class PlayerMovement : GameCharacter {
         }
     }
 
-
+    public void unlockEnemy()
+    {
+        currentEnemy = null;
+    }
 }
