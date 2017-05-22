@@ -15,13 +15,15 @@ public class CameraOrbit : MonoBehaviour {
 
     public bool playerHasEnemy;
     public Vector3 positionInCombat;
+    
 
     public float playerHeight;
 
+    public float cameraSpeed;
 
     public Vector3 positionInMovement;
 
-    void LateUpdate()
+    void Update()
     {
 
         Vector3 position = Vector3.zero;
@@ -31,8 +33,10 @@ public class CameraOrbit : MonoBehaviour {
 
         if (playerHasEnemy)
         {
-            position = player.position + player.TransformDirection(Vector3.one + positionInCombat);
-            rotation = Quaternion.LookRotation((player.GetComponent<PlayerMovement>().currentEnemy.transform.position + Vector3.up * playerHeight) - transform.position);   
+            position = player.position + player.TransformDirection(new Vector3(1, 1, 1) + positionInCombat);
+            
+
+            rotation = Quaternion.LookRotation((player.position + player.forward * 1.5f + Vector3.up) - transform.position);
         }
         else
         {
@@ -40,8 +44,8 @@ public class CameraOrbit : MonoBehaviour {
             rotation = Quaternion.LookRotation(player.transform.position - transform.position);
         }
 
-        transform.position = Vector3.Lerp (transform.position, position, Time.deltaTime * 5);
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 5f);
+        transform.position = Vector3.Lerp (transform.position, position, Time.deltaTime * cameraSpeed);
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * cameraSpeed);
     }
 
 

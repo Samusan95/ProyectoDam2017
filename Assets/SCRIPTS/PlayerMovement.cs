@@ -26,6 +26,7 @@ public class PlayerMovement : GameCharacter {
     public float defenseCoolDown = 1f;
     public float defenseCoolDownTimer = 0;
 
+    bool isInCombat;
     private void Start()
     {
        
@@ -37,6 +38,10 @@ public class PlayerMovement : GameCharacter {
     // Update is called once per frame
     void Update ()
     {
+
+        isInCombat = currentEnemy != null && Vector3.Distance(transform.position, currentEnemy.transform.position) < 5f;
+        float speedMagnitude;
+
         if (Input.GetKeyDown(KeyCode.Q))
         {
             currentEnemy = null;
@@ -57,27 +62,67 @@ public class PlayerMovement : GameCharacter {
             animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 0, Time.deltaTime * 5));
         }
 
-
-        if (Input.GetMouseButtonDown(0))
+        if (!isInCombat)
         {
-            sendOrder();
+
+            enableAgent(true);
+
+            speedMagnitude = nav.desiredVelocity.normalized.magnitude;
+           
+
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                sendOrder();
+            }
+
+            switch (currentState)
+            {
+                case states.goToPosition:
+                    goToPosition();
+                    break;
+                case states.attackEnemy:
+                    if (currentEnemy)
+                        attackEnemy();
+                    break;
+            }
+        }
+        else
+        {
+            enableAgent(false);
+
+
+            float h = Input.GetAxis("Horizontal");
+            float v = Input.GetAxis("Vertical");
+            
+            speedMagnitude = Mathf.Abs(h + v);
+            animator.SetFloat("vertical", v);
+            animator.SetFloat("horizontal", h);
+
+            if (speedMagnitude > 0)
+                faceToPosition(currentEnemy.transform.position);
+
+            if (!isInAnimatorState(0, "Attack") && !isBlocking)
+            {
+                if (Input.GetKeyDown(KeyCode.RightArrow))
+                {
+                    animator.SetTrigger("attack");
+                }
+                if (Input.GetKeyDown(KeyCode.LeftArrow))
+                {
+                    isBlocking = true;
+                }
+            }
+
+
         }
 
-        switch (currentState)
-        {
-            case states.goToPosition:
-                goToPosition();
-                break;
-            case states.attackEnemy:
-                if (currentEnemy)
-                    attackEnemy();
-                break;
-        }
 
-        animator.SetFloat ("speedMagnitude", nav.desiredVelocity.normalized.magnitude);
-		
-	
-	}
+
+        animator.SetFloat("speedMagnitude", speedMagnitude);
+        animator.SetBool("inCombat", isInCombat);
+        
+    }
 
     private void goToPosition()
     {
@@ -94,28 +139,17 @@ public class PlayerMovement : GameCharacter {
 
     private void attackEnemy()
     {
-        if (!isInPosition(currentEnemy.transform.position))
-        {
-            nav.SetDestination(currentEnemy.transform.position);
-            nav.isStopped = false;
-        }
-        else
-        {
-            nav.isStopped = true;
-            
-            
-            if (!isInAnimatorState(0, "Attack") && !isBlocking)
+
+            if (!isInPosition(currentEnemy.transform.position))
             {
-                if (Input.GetKeyDown(KeyCode.RightArrow))
-                {
-                    animator.SetTrigger("attack");
-                }
-                if (Input.GetKeyDown(KeyCode.LeftArrow))
-                {
-                    isBlocking = true;
-                }
+                nav.SetDestination(currentEnemy.transform.position);
+                nav.isStopped = false;
             }
-        }
+            else
+            {
+                nav.isStopped = true;
+            }
+         
     }
     private void sendOrder()
     {
@@ -145,6 +179,19 @@ public class PlayerMovement : GameCharacter {
         
     }
 
-    
+    public void enableAgent(bool enabled)
+    {
+        if (enabled)
+        {
+            nav.enabled = true;
+            GetComponent<CharacterController>().enabled = false;
+        }
+        else
+        {
+            nav.enabled = false;
+            GetComponent<CharacterController>().enabled = true;
+        }
+    }
+
 
 }
