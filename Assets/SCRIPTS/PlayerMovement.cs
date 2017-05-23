@@ -11,7 +11,7 @@ public class PlayerMovement : GameCharacter {
 
     [Header("Controls")]
     public GameObject combatUI;
-    public Joystick joystick;
+    public TouchControls input;
 
     
     public enum states
@@ -96,8 +96,8 @@ public class PlayerMovement : GameCharacter {
             enableAgent(false);
 
 
-            float h = joystick.Horizontal();
-            float v = joystick.Vertical();
+            float h = input.Horizontal();
+            float v = input.Vertical();
             
             speedMagnitude = Mathf.Abs(h + v);
             animator.SetFloat("vertical", v);
@@ -108,11 +108,11 @@ public class PlayerMovement : GameCharacter {
 
             if (!isInAnimatorState(0, "Attack") && !isBlocking)
             {
-                if (Input.GetKeyDown(KeyCode.RightArrow))
+                if (Input.GetKeyDown(KeyCode.RightArrow) || input.SwipeX() > 0)
                 {
                     animator.SetTrigger("attack");
                 }
-                if (Input.GetKeyDown(KeyCode.LeftArrow))
+                if (Input.GetKeyDown(KeyCode.LeftArrow) || input.SwipeX()<0)
                 {
                     isBlocking = true;
                 }

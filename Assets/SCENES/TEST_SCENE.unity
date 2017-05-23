@@ -47917,7 +47917,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 693534311}
-  distance: 5
+  distance: 7
   playerHasEnemy: 0
   positionInCombat: {x: 2.31, y: 0.6, z: -0.6}
   playerHeight: 1.15
@@ -57141,14 +57141,14 @@ RectTransform:
   m_GameObject: {fileID: 1695885435}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.73944795, y: 0.73944795, z: 0.73944795}
   m_Children: []
   m_Father: {fileID: 1944285882}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 616, y: 274}
+  m_AnchoredPosition: {x: 367, y: 158}
   m_SizeDelta: {x: 160, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1695885437
@@ -57262,7 +57262,7 @@ RectTransform:
   m_GameObject: {fileID: 1706083559}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 146.9851}
-  m_LocalScale: {x: 2.4967318, y: 2.4967299, z: 2.4967299}
+  m_LocalScale: {x: 1.7184248, y: 1.7184232, z: 1.7184232}
   m_Children:
   - {fileID: 91880119}
   m_Father: {fileID: 1944285882}
@@ -57270,7 +57270,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -457, y: -164}
+  m_AnchoredPosition: {x: -279, y: -120}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1706083561
@@ -57314,9 +57314,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1706083559}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b439d9ad2abdc264982dcead0da85c0d, type: 3}
+  m_Script: {fileID: 11500000, guid: b4ad1614238c2dd4eac5bb374225a0e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minSwipeDistY: 0
+  minSwipeDistX: 0
 --- !u!1 &1740314387
 GameObject:
   m_ObjectHideFlags: 1
@@ -58397,7 +58399,7 @@ Prefab:
         type: 2}
       propertyPath: joy
       value: 
-      objectReference: {fileID: 1706083563}
+      objectReference: {fileID: 0}
     - target: {fileID: 114213032965521456, guid: 6172b7a351e533244bd64e6745b48b55,
         type: 2}
       propertyPath: joystickgo
@@ -58407,12 +58409,17 @@ Prefab:
         type: 2}
       propertyPath: joystick
       value: 
-      objectReference: {fileID: 1706083563}
+      objectReference: {fileID: 0}
     - target: {fileID: 114213032965521456, guid: 6172b7a351e533244bd64e6745b48b55,
         type: 2}
       propertyPath: combatUI
       value: 
       objectReference: {fileID: 1944285881}
+    - target: {fileID: 114213032965521456, guid: 6172b7a351e533244bd64e6745b48b55,
+        type: 2}
+      propertyPath: input
+      value: 
+      objectReference: {fileID: 1706083563}
     m_RemovedComponents:
     - {fileID: 143987493812405594, guid: 6172b7a351e533244bd64e6745b48b55, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 6172b7a351e533244bd64e6745b48b55, type: 2}
