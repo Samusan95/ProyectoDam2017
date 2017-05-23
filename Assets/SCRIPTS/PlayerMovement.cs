@@ -41,14 +41,13 @@ public class PlayerMovement : GameCharacter {
     void Update ()
     {
 
-        isInCombat = currentEnemy != null && Vector3.Distance(transform.position, currentEnemy.transform.position) < 5f;
         combatUI.SetActive(isInCombat);
 
         float speedMagnitude;
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            currentEnemy = null;
+            unlockEnemy();
         }
 
         if (isBlocking)
@@ -68,12 +67,9 @@ public class PlayerMovement : GameCharacter {
 
         if (!isInCombat)
         {
-
+            isInCombat = currentEnemy != null && Vector3.Distance(transform.position, currentEnemy.transform.position) < 5f;
             enableAgent(true);
-
             speedMagnitude = nav.desiredVelocity.normalized.magnitude;
-           
-
 
             if (Input.GetMouseButtonDown(0))
             {
@@ -200,5 +196,6 @@ public class PlayerMovement : GameCharacter {
     public void unlockEnemy()
     {
         currentEnemy = null;
+        isInCombat = false;
     }
 }
