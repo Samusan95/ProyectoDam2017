@@ -9,27 +9,29 @@ using UnityEngine.AI;
 
 public class PlayerMovement : GameCharacter {
 
-    
+    [Header("Controls")]
+    public GameObject combatUI;
+    public TouchControls input;
 
+    
     public enum states
     {
         goToPosition,
         attackEnemy
     }
-
+    [Header("States")]
     public states currentState;
     
-    public Vector3 positionToGo;
+    private Vector3 positionToGo;
     public GameObject currentEnemy;
 
 
     public float defenseCoolDown = 1f;
-    public float defenseCoolDownTimer = 0;
+    private float defenseCoolDownTimer = 0;
 
     bool isInCombat;
     private void Start()
     {
-       
         nav = GetComponent<NavMeshAgent>();
         positionToGo = transform.position;
     }
@@ -39,12 +41,13 @@ public class PlayerMovement : GameCharacter {
     void Update ()
     {
 
-        isInCombat = currentEnemy != null && Vector3.Distance(transform.position, currentEnemy.transform.position) < 5f;
+        combatUI.SetActive(isInCombat);
+
         float speedMagnitude;
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            currentEnemy = null;
+            unlockEnemy();
         }
 
         if (isBlocking)
@@ -64,12 +67,9 @@ public class PlayerMovement : GameCharacter {
 
         if (!isInCombat)
         {
-
+            isInCombat = currentEnemy != null && Vector3.Distance(transform.position, currentEnemy.transform.position) < 5f;
             enableAgent(true);
-
             speedMagnitude = nav.desiredVelocity.normalized.magnitude;
-           
-
 
             if (Input.GetMouseButtonDown(0))
             {
@@ -92,8 +92,8 @@ public class PlayerMovement : GameCharacter {
             enableAgent(false);
 
 
-            float h = Input.GetAxis("Horizontal");
-            float v = Input.GetAxis("Vertical");
+            float h = input.Horizontal();
+            float v = input.Vertical();
             
             speedMagnitude = Mathf.Abs(h + v);
             animator.SetFloat("vertical", v);
@@ -104,11 +104,11 @@ public class PlayerMovement : GameCharacter {
 
             if (!isInAnimatorState(0, "Attack") && !isBlocking)
             {
-                if (Input.GetKeyDown(KeyCode.RightArrow))
+                if (Input.GetKeyDown(KeyCode.RightArrow) || input.SwipeX() > 0)
                 {
                     animator.SetTrigger("attack");
                 }
-                if (Input.GetKeyDown(KeyCode.LeftArrow))
+                if (Input.GetKeyDown(KeyCode.LeftArrow) || input.SwipeX()<0)
                 {
                     isBlocking = true;
                 }
@@ -193,5 +193,9 @@ public class PlayerMovement : GameCharacter {
         }
     }
 
-
+    public void unlockEnemy()
+    {
+        currentEnemy = null;
+        isInCombat = false;
+    }
 }
