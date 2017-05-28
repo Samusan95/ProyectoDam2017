@@ -35978,6 +35978,11 @@ Prefab:
       propertyPath: notMyLayer.m_Bits
       value: 513
       objectReference: {fileID: 0}
+    - target: {fileID: 114748863238053472, guid: 5c01d00e2dbd8e0408f810eb5a214d51,
+        type: 2}
+      propertyPath: espera
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5c01d00e2dbd8e0408f810eb5a214d51, type: 2}
   m_IsPrefabParent: 0
@@ -58008,7 +58013,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4079911133746428, guid: 6172b7a351e533244bd64e6745b48b55, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 32.43
+      value: 21.16
       objectReference: {fileID: 0}
     - target: {fileID: 4079911133746428, guid: 6172b7a351e533244bd64e6745b48b55, type: 2}
       propertyPath: m_LocalPosition.y
