@@ -10,13 +10,14 @@ using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class TEST_enemy : GameCharacter {
+    public float espera;
+    private float esperapri = 0;
 
- 
     [Header("Enemy")]
     private GameObject player;
 
 
-    [Header ("lineSight")]
+    [Header("lineSight")]
     public Transform eyePosition;
     public float fieldOfView;
     public float distanceOfView;
@@ -31,63 +32,63 @@ public class TEST_enemy : GameCharacter {
     public bool canSeePlayer = false;
 
     public enum ENEMY_STATE
-	{
+    {
         IDLE,
-		CHASE,
-		ATTACK
-	}
+        CHASE,
+        ATTACK
+    }
 
-	public ENEMY_STATE currentState
-	{
-		get {return CurrentState;}
+    public ENEMY_STATE currentState
+    {
+        get { return CurrentState; }
 
-		set 
-		{
-			CurrentState = value;
+        set
+        {
+            CurrentState = value;
 
-			StopAllCoroutines ();
-			switch (CurrentState)
-			{
-            case ENEMY_STATE.IDLE:
-                StartCoroutine(AIIdle ());
+            StopAllCoroutines();
+            switch (CurrentState)
+            {
+                case ENEMY_STATE.IDLE:
+                    StartCoroutine(AIIdle());
                     break;
-			case ENEMY_STATE.CHASE:
-				StartCoroutine (AIChase ());
-					break;
+                case ENEMY_STATE.CHASE:
+                    StartCoroutine(AIChase());
+                    break;
 
-			case ENEMY_STATE.ATTACK:
-				StartCoroutine (AIAttack ());
-					break;
-			}
-		} 
-	}
+                case ENEMY_STATE.ATTACK:
+                    StartCoroutine(AIAttack());
+                    break;
+            }
+        }
+    }
 
-	[SerializeField]
-	private ENEMY_STATE CurrentState = ENEMY_STATE.IDLE;
+    [SerializeField]
+    private ENEMY_STATE CurrentState = ENEMY_STATE.IDLE;
 
-	public float attackDistance;
-	private float distanceToPlayer;
+    public float attackDistance;
+    private float distanceToPlayer;
 
 
 
-	void Awake ()
-	{
-		nav = GetComponent<NavMeshAgent> ();
-		animator = GetComponent<Animator> ();
-	}
+    void Awake()
+    {
+        nav = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
+    }
 
-	void Start ()
-	{
+    void Start()
+    {
         getWayPoints();
         currentState = ENEMY_STATE.IDLE;
         player = closestObject("PlayerRoot");
-	}
+    }
 
-	void Update()
-	{
-        animator.SetFloat ("speed", Mathf.Abs (nav.desiredVelocity.magnitude));
-		distanceToPlayer = Vector3.Distance (transform.position, player.transform.position);
-	}
+    void Update()
+    {
+        animator.SetFloat("speed", Mathf.Abs(nav.desiredVelocity.magnitude));
+        distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
+    }
 
     private void LateUpdate()
     {
@@ -96,31 +97,12 @@ public class TEST_enemy : GameCharacter {
 
 
 
+
     //--------------------------------------------ESTADOS---------------------------------------------//
     public IEnumerator AIIdle()
     {
         while (currentState == ENEMY_STATE.IDLE)
-
         {
-            
-
-            if (patrolRoute)
-            {
-                if (isInPosition(wayPoints[contador].position))
-                {
-                    if (contador == wayPoints.Length - 1)
-                        contador = 0;
-                    else
-                        contador++;
-                }
-                else
-                {
-                    nav.isStopped = false;
-                    nav.SetDestination(wayPoints[contador].position);
-                }
-            }
-
-
 
             if (canSeePlayer)
             {
@@ -129,12 +111,37 @@ public class TEST_enemy : GameCharacter {
                 yield break;
             }
 
-            
 
+            if (patrolRoute)
+            {
+
+                if (isInPosition(wayPoints[contador].position))
+                {
+                    esperapri += Time.deltaTime;
+                    nav.isStopped = true;
+                    if (esperapri >= espera)
+                    {
+
+                        esperapri = 0;
+
+                        if (contador == wayPoints.Length - 1)
+                            contador = 0;
+                        else
+                            contador++;
+                    }
+
+                }
+                else
+                {
+                    nav.isStopped = false;
+                    nav.SetDestination(wayPoints[contador].position);
+                }
+            }
             yield return null;
         }
 
     }
+    
 
     //Perseguir al jugador.
     public IEnumerator AIChase()
